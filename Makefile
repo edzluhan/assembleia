@@ -9,3 +9,6 @@ local-db-start:
 
 run-local: local-db-start
 	./gradlew bootRun
+
+debug: local-db-start
+	./gradlew bootRun --debug-jvm
