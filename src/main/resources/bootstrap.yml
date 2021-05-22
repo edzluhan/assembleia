@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: assembly
+  flyway:
+    check-location: true
+    enabled: true
+    url: ${spring.datasource.jdbcUrl}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
