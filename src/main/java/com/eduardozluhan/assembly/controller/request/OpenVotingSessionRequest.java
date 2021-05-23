@@ -3,6 +3,7 @@ package com.eduardozluhan.assembly.controller.request;
 import lombok.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -11,5 +12,6 @@ public class OpenVotingSessionRequest {
     @NotNull
     Long subjectId;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Future
     LocalDateTime endsAt;
 }

@@ -7,8 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
 public class ExceptionAdvice {
@@ -24,5 +31,22 @@ public class ExceptionAdvice {
     public ResponseEntity<String> conflict(UserAlreadyVotedException e) {
         LOGGER.error(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> badRequest(ConstraintViolationException e) {
+        List<String> errorMessages = e.getConstraintViolations().stream()
+                .map(v -> v.getPropertyPath() + " " + v.getMessage())
+                .collect(Collectors.toList());
+
+        LOGGER.error(errorMessages.toString());
+        return new ResponseEntity<>(errorMessages.toString(), BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> badRequest(MethodArgumentNotValidException e) {
+        LOGGER.error(e.getMessage());
+
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
 }

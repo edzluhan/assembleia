@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Validated
 @RestController
 public class VotingSessionController {
@@ -20,7 +22,7 @@ public class VotingSessionController {
     }
 
     @PostMapping(path = "/voting-session")
-    public ResponseEntity<VotingSession> openVotingSession(@RequestBody OpenVotingSessionRequest request) {
+    public ResponseEntity<VotingSession> openVotingSession(@RequestBody @Valid OpenVotingSessionRequest request) {
         return new ResponseEntity<>(
                 service.openVotingSession(request.getSubjectId(), request.getEndsAt()), HttpStatus.CREATED);
     }

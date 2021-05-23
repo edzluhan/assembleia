@@ -1,5 +1,6 @@
 package com.eduardozluhan.assembly.model;
 
+import com.eduardozluhan.assembly.controller.request.SubjectRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,13 @@ public class Subject {
     @NotNull
     private String title;
     private String details;
+
+    public Subject(String title, String details) {
+        this.title = title;
+        this.details = details;
+    }
+
+    public static Subject from(SubjectRequest request) {
+        return new Subject(request.getTitle(), request.getDetails());
+    }
 }

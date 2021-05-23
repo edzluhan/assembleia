@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Validated
 @RestController
 public class VoteController {
@@ -22,7 +24,7 @@ public class VoteController {
     }
 
     @PostMapping(path = "/vote")
-    public ResponseEntity<Vote> registerVote(@RequestBody VoteRequest request) throws VotingSessionNotAvailableException, UserAlreadyVotedException {
+    public ResponseEntity<Vote> registerVote(@RequestBody @Valid VoteRequest request) throws VotingSessionNotAvailableException, UserAlreadyVotedException {
         return new ResponseEntity<>(service.registerVote(request), HttpStatus.CREATED);
     }
 }
