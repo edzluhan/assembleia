@@ -2,6 +2,8 @@ package com.eduardozluhan.assembly.service;
 
 import com.eduardozluhan.assembly.model.VotingSession;
 import com.eduardozluhan.assembly.repository.VotingSessionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -9,23 +11,30 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Timer;
 
+import static java.lang.String.format;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 @Service
 public class VotingSessionService {
     private final VotingSessionRepository repository;
+    private final Logger LOGGER = LoggerFactory.getLogger(VotingSessionService.class);
 
     public VotingSessionService(VotingSessionRepository repository) {
         this.repository = repository;
     }
 
-    public VotingSession openVotingSession(Integer subjectId, LocalDateTime endsAt) {
+    public VotingSession openVotingSession(Long subjectId, LocalDateTime endsAt) {
         LocalDateTime endDateTime = calculateEndDateTime(endsAt);
         VotingSession votingSession = new VotingSession(subjectId, endDateTime);
 
         scheduleVotingSessionEnd(endDateTime, votingSession);
 
-        return repository.save(votingSession);
+        VotingSession persistedSession = repository.save(votingSession);
+
+        LOGGER.info(format("Session with id %s ending %s was created.", persistedSession.getId(),
+                persistedSession.getEndsAt()));
+
+        return persistedSession;
     }
 
     private void scheduleVotingSessionEnd(LocalDateTime endDateTime, VotingSession votingSession) {

@@ -1,6 +1,7 @@
 package com.eduardozluhan.assembly.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,22 +13,23 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "voting_sessions")
 public class VotingSession {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @NotNull
     @Column(name = "subject_id")
-    private Integer subjectId;
+    private Long subjectId;
 
     @NotNull
     @Column(name = "ends_at")
     private LocalDateTime endsAt;
 
-    public VotingSession(@NotNull Integer subjectId, @NotNull LocalDateTime endsAt) {
+    public VotingSession(Long subjectId, LocalDateTime endsAt) {
         this.subjectId = subjectId;
         this.endsAt = endsAt;
     }

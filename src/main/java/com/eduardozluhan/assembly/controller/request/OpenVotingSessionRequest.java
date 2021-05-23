@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Value
 public class OpenVotingSessionRequest {
     @NotNull
-    Integer subjectId;
+    Long subjectId;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDateTime endsAt;
 }
