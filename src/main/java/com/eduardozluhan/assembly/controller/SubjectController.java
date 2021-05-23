@@ -3,6 +3,7 @@ package com.eduardozluhan.assembly.controller;
 import com.eduardozluhan.assembly.model.Subject;
 import com.eduardozluhan.assembly.repository.SubjectRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,9 +19,10 @@ public class SubjectController {
         this.repository = repository;
     }
 
-    @PostMapping(path = "/subject")
+    @PostMapping(path = "/subject", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Subject> createSubject(@RequestBody Subject subject) {
         Subject persistedSubject = repository.save(subject);
         return new ResponseEntity<>(persistedSubject, HttpStatus.CREATED);
     }
 }
+
