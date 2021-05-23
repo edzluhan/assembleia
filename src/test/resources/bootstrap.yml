@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: assembly
-  flyway:
-    check-location: true
-    enabled: true
-    url: jdbc:postgresql://localhost:5432/postgres
-    user: postgres
-    password: foobar
