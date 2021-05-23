@@ -1,7 +1,8 @@
 package com.eduardozluhan.assembly.controller;
 
+import com.eduardozluhan.assembly.exceptions.ResourceAlreadyExistsException;
 import com.eduardozluhan.assembly.model.Subject;
-import com.eduardozluhan.assembly.repository.SubjectRepository;
+import com.eduardozluhan.assembly.service.SubjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 public class SubjectController {
-    private final SubjectRepository repository;
+    private final SubjectService service;
 
-    public SubjectController(SubjectRepository repository) {
-        this.repository = repository;
+    public SubjectController(SubjectService service) {
+        this.service = service;
     }
 
     @PostMapping(path = "/subject", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Subject> createSubject(@RequestBody Subject subject) {
-        Subject persistedSubject = repository.save(subject);
-        return new ResponseEntity<>(persistedSubject, HttpStatus.CREATED);
+    ResponseEntity<Subject> createSubject(@RequestBody Subject subject) throws ResourceAlreadyExistsException {
+        return new ResponseEntity<>(service.storeSubject(subject), HttpStatus.CREATED);
     }
 }
 
