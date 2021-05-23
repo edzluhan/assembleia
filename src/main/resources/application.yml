@@ -1,6 +1,6 @@
 spring:
   application:
-    name: membership
+    name: assembly
   main:
     banner-mode: "off"
   jpa:
