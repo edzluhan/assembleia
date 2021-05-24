@@ -25,7 +25,7 @@ public class SubjectController {
 
     @PostMapping(path = "/subject", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Subject> createSubject(@RequestBody @Valid SubjectRequest request) throws ResourceAlreadyExistsException {
-        return new ResponseEntity<>(service.storeSubject(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.storeSubject(Subject.from(request)), HttpStatus.CREATED);
     }
 }
 

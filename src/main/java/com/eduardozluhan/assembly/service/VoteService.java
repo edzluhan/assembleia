@@ -1,6 +1,5 @@
 package com.eduardozluhan.assembly.service;
 
-import com.eduardozluhan.assembly.controller.request.VoteRequest;
 import com.eduardozluhan.assembly.exceptions.UserAlreadyVotedException;
 import com.eduardozluhan.assembly.exceptions.VotingSessionNotAvailableException;
 import com.eduardozluhan.assembly.model.Vote;
@@ -26,21 +25,19 @@ public class VoteService {
         this.votingSessionRepository = votingSessionRepository;
     }
 
-    public Vote registerVote(VoteRequest request) throws VotingSessionNotAvailableException, UserAlreadyVotedException {
-        Vote voteFromRequest = Vote.from(request);
-
+    public Vote registerVote(Vote vote) throws VotingSessionNotAvailableException, UserAlreadyVotedException {
         Optional<VotingSession> votingSessionOptional = votingSessionRepository
-                .findById(request.getVotingSessionId());
+                .findById(vote.getVotingSessionId());
 
         if (isVotingSessionAvailable(votingSessionOptional)) {
             try {
-                return voteRepository.save(voteFromRequest);
+                return voteRepository.save(vote);
             } catch (DataIntegrityViolationException e) {
-                throw new UserAlreadyVotedException(request.getUserId());
+                throw new UserAlreadyVotedException(vote.getUserId());
             }
         }
 
-        throw new VotingSessionNotAvailableException(request.getVotingSessionId());
+        throw new VotingSessionNotAvailableException(vote.getVotingSessionId());
     }
 
     private boolean isVotingSessionAvailable(Optional<VotingSession> votingSessionOptional) {

@@ -1,6 +1,5 @@
 package com.eduardozluhan.assembly.service;
 
-import com.eduardozluhan.assembly.controller.request.SubjectRequest;
 import com.eduardozluhan.assembly.exceptions.ResourceAlreadyExistsException;
 import com.eduardozluhan.assembly.model.Subject;
 import com.eduardozluhan.assembly.repository.SubjectRepository;
@@ -18,9 +17,8 @@ public class SubjectService {
         this.repository = repository;
     }
 
-    public Subject storeSubject(SubjectRequest request) throws ResourceAlreadyExistsException {
+    public Subject storeSubject(Subject subject) throws ResourceAlreadyExistsException {
         try {
-            Subject subject = Subject.from(request);
             Subject persistedSubject = repository.save(subject);
             LOGGER.info(String.format("Subject with id %s was created.", persistedSubject.getId()));
             return persistedSubject;

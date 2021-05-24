@@ -26,6 +26,6 @@ public class VoteController {
     @PostMapping(path = "/vote")
     public ResponseEntity<Vote> registerVote(@RequestBody @Valid VoteRequest request)
             throws VotingSessionNotAvailableException, UserAlreadyVotedException {
-        return new ResponseEntity<>(service.registerVote(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.registerVote(Vote.from(request)), HttpStatus.CREATED);
     }
 }
