@@ -1,6 +1,7 @@
 package com.eduardozluhan.assembly.service;
 
 import com.eduardozluhan.assembly.model.VotingSession;
+import com.eduardozluhan.assembly.repository.VoteRepository;
 import com.eduardozluhan.assembly.repository.VotingSessionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +18,12 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 @Service
 public class VotingSessionService {
     private final VotingSessionRepository repository;
+    private final VoteRepository voteRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(VotingSessionService.class);
 
-    public VotingSessionService(VotingSessionRepository repository) {
+    public VotingSessionService(VotingSessionRepository repository, VoteRepository voteRepository) {
         this.repository = repository;
+        this.voteRepository = voteRepository;
     }
 
     public VotingSession openVotingSession(Long subjectId, LocalDateTime endsAt) {
@@ -38,8 +41,8 @@ public class VotingSessionService {
     }
 
     private void scheduleVotingSessionEnd(LocalDateTime endDateTime, VotingSession votingSession) {
-        VotingSessionTask votingSessionTask = new VotingSessionTask(votingSession);
-        new Timer().schedule(votingSessionTask,
+        VotingSessionCloserTask votingSessionCloserTask = new VotingSessionCloserTask(votingSession, voteRepository);
+        new Timer().schedule(votingSessionCloserTask,
                 Date.from(endDateTime.atZone(ZoneId.systemDefault()).toInstant()));
     }
 
