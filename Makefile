@@ -7,6 +7,9 @@ build: clean
 local-db-start:
 	docker-compose up -d
 
+test: local-db-start
+	./gradlew test
+
 run-local: local-db-start
 	./gradlew bootRun
 

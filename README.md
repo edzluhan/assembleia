@@ -6,7 +6,9 @@ Requisitos:
 - Java 11
 - Docker
 
-O projeto pode ser iniciado pelo comando `make run-local`, que iniciará uma instância do banco de dados utilizando o arquivo `docker-compose.yml` e em seguida rodando a aplicação usando `./gradlew bootRun`
+O projeto pode ser iniciado pelo comando `make run-local`, que iniciará uma instância do banco de dados utilizando o arquivo `docker-compose.yml` e em seguida rodando a aplicação usando `./gradlew bootRun`.
+
+Para rodar os testes basta usar o comando `make test`.
 
 ## Endpoints disponíveis
 
