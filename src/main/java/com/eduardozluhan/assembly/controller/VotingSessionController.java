@@ -29,7 +29,7 @@ public class VotingSessionController {
     @PostMapping(path = "/voting-session")
     public ResponseEntity<VotingSession> openVotingSession(@RequestBody @Valid OpenVotingSessionRequest request) {
         return new ResponseEntity<>(
-                service.openVotingSession(request.getSubjectId(), request.getEndsAt()), HttpStatus.CREATED);
+                service.openVotingSession(request.getSubjectId(), request.getDurationInMinutes()), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/voting-session/{votingSessionId}/report")

@@ -52,15 +52,15 @@ class VotingSessionControllerIntegrationTest {
     }
 
     @Test
-    void shouldRespond201WithVotingSessionEndingAtRequestedTime() throws Exception {
-        LocalDateTime endsAt = LocalDateTime.parse("2025-05-16T00:00:01");
+    void shouldRespond201WithVotingSessionEndingAfterRequestedMinutes() throws Exception {
+        LocalDateTime endsAt = LocalDateTime.now().plusMinutes(5L);
         when(service.openVotingSession(any(), any()))
                 .thenReturn(new VotingSession(1L, 1L, endsAt));
 
         mockMvc.perform(post("/voting-session")
                 .content("{\n" +
                         "    \"subjectId\": 1,\n" +
-                        "    \"endsAt\": \"2025-05-16T00:00:01\"\n" +
+                        "    \"endsIn\": 5\n" +
                         "}")
                 .contentType(MediaType.APPLICATION_JSON)
         )

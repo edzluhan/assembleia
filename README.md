@@ -67,11 +67,11 @@ Corpo da requisição:
 ```json
 {
 	"subjectId": 1,
-	"endsAt": "2021-05-25T01:30:00"
+	"durationInMinutes": 60
 }
 ```
 
-O campo `subjectId` é de preenchimento obrigatório, o campo `endsAt` indica a data e hora de término da sessão de votação, e no caso de omitido será aplicado o prazo de 1 minuto a partir do recebimento da requisição. A criação de mais de uma sessão de votação para uma mesma pauta é permitida, portanto, não existe a verificação de já existir uma votação ativa para a pauta.
+O campo `subjectId` é de preenchimento obrigatório, o campo `durationInMinutes` indica a duração da sessão de votação em minutos, e no caso de omitido será aplicado o prazo de 1 minuto a partir do recebimento da requisição. A criação de mais de uma sessão de votação para uma mesma pauta é permitida, portanto, não existe a verificação de já existir uma votação ativa para a pauta.
 
 Respostas da requisição:
 

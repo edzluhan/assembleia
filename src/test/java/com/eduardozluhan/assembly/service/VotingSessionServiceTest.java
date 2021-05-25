@@ -11,15 +11,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static com.eduardozluhan.assembly.repository.VoteRepository.NO;
 import static com.eduardozluhan.assembly.repository.VoteRepository.YES;
+import static java.time.LocalDateTime.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +36,31 @@ class VotingSessionServiceTest {
 
     @InjectMocks
     VotingSessionService service;
+
+    @Test
+    void openVotingSession_shouldSetEndsAtAccordingToRequest() {
+        long subjectId = 1L;
+        long endsIn = 5L;
+        VotingSession votingSession = new VotingSession(1L, now().plusMinutes(5L).truncatedTo(ChronoUnit.MINUTES));
+
+        when(votingSessionRepository.save(any(VotingSession.class))).thenReturn(votingSession);
+
+        service.openVotingSession(subjectId, endsIn);
+
+        verify(votingSessionRepository).save(eq(votingSession));
+    }
+
+    @Test
+    void openVotingSession_shouldSetEndsAtToOneMinuteAfterWhenNotSpecified() {
+        long subjectId = 1L;
+        VotingSession votingSession = new VotingSession(1L, now().plusMinutes(1L).truncatedTo(ChronoUnit.MINUTES));
+
+        when(votingSessionRepository.save(any(VotingSession.class))).thenReturn(votingSession);
+
+        service.openVotingSession(subjectId, null);
+
+        verify(votingSessionRepository).save(eq(votingSession));
+    }
 
     @Test
     void sessionReport_shouldPassSubjectWhenMostVotesAreInFavor() throws VotingSessionNotAvailableException {

@@ -30,8 +30,8 @@ public class VotingSessionService {
         this.voteRepository = voteRepository;
     }
 
-    public VotingSession openVotingSession(Long subjectId, LocalDateTime endsAt) {
-        LocalDateTime endDateTime = calculateEndDateTime(endsAt);
+    public VotingSession openVotingSession(Long subjectId, Long durationInMinutes) {
+        LocalDateTime endDateTime = calculateEndDateTime(durationInMinutes);
         VotingSession votingSession = new VotingSession(subjectId, endDateTime);
 
         scheduleVotingSessionEnd(endDateTime, votingSession);
@@ -67,7 +67,8 @@ public class VotingSessionService {
                 Date.from(endDateTime.atZone(ZoneId.systemDefault()).toInstant()));
     }
 
-    private LocalDateTime calculateEndDateTime(LocalDateTime endsAt) {
-        return endsAt == null ? LocalDateTime.now().plus(1, MINUTES) : endsAt;
+    private LocalDateTime calculateEndDateTime(Long endsIn) {
+        long durationInMinutes = endsIn == null ? 1 : endsIn;
+        return LocalDateTime.now().plus(durationInMinutes, MINUTES).truncatedTo(MINUTES);
     }
 }
