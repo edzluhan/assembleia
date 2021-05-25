@@ -1,8 +1,8 @@
 package com.eduardozluhan.assembly.service;
 
-import com.eduardozluhan.assembly.controller.request.VoteRequest;
 import com.eduardozluhan.assembly.exceptions.UserAlreadyVotedException;
 import com.eduardozluhan.assembly.exceptions.VotingSessionNotAvailableException;
+import com.eduardozluhan.assembly.model.Vote;
 import com.eduardozluhan.assembly.model.VotingSession;
 import com.eduardozluhan.assembly.repository.VoteRepository;
 import com.eduardozluhan.assembly.repository.VotingSessionRepository;
@@ -41,9 +41,9 @@ class VoteServiceTest {
         when(votingSession.getEndsAt()).thenReturn(LocalDateTime.now().plusMinutes(5L));
         when(votingSessionRepository.findById(any())).thenReturn(Optional.of(votingSession));
 
-        VoteRequest request = new VoteRequest("uniqueUserId", 1L, "Sim");
+        Vote vote = new Vote("uniqueUserId", 1L, "Sim", LocalDateTime.now());
 
-        voteService.registerVote(request);
+        voteService.registerVote(vote);
 
         verify(voteRepository).save(any());
     }
@@ -55,9 +55,9 @@ class VoteServiceTest {
         when(votingSession.getEndsAt()).thenReturn(LocalDateTime.now().minusMinutes(5L));
         when(votingSessionRepository.findById(any())).thenReturn(Optional.of(votingSession));
 
-        VoteRequest request = new VoteRequest("uniqueUserId", 1L, "Sim");
+        Vote vote = new Vote("uniqueUserId", 1L, "Sim", LocalDateTime.now());
 
-        assertThrows(VotingSessionNotAvailableException.class,() -> voteService.registerVote(request));
+        assertThrows(VotingSessionNotAvailableException.class,() -> voteService.registerVote(vote));
 
         verify(voteRepository, never()).save(any());
     }
@@ -66,9 +66,9 @@ class VoteServiceTest {
     void shouldNotRegisterVote_whenVotingSessionIsNotFound() {
         when(votingSessionRepository.findById(any())).thenReturn(Optional.empty());
 
-        VoteRequest request = new VoteRequest("uniqueUserId", 1L, "Sim");
+        Vote vote = new Vote("uniqueUserId", 1L, "Sim", LocalDateTime.now());
 
-        assertThrows(VotingSessionNotAvailableException.class,() -> voteService.registerVote(request));
+        assertThrows(VotingSessionNotAvailableException.class,() -> voteService.registerVote(vote));
 
         verify(voteRepository, never()).save(any());
     }
@@ -81,8 +81,8 @@ class VoteServiceTest {
         when(votingSessionRepository.findById(any())).thenReturn(Optional.of(votingSession));
         when(voteRepository.save(any())).thenThrow(new DataIntegrityViolationException("some message"));
 
-        VoteRequest request = new VoteRequest("uniqueUserId", 1L, "Sim");
+        Vote vote = new Vote("uniqueUserId", 1L, "Sim", LocalDateTime.now());
 
-        assertThrows(UserAlreadyVotedException.class,() -> voteService.registerVote(request));
+        assertThrows(UserAlreadyVotedException.class,() -> voteService.registerVote(vote));
     }
 }

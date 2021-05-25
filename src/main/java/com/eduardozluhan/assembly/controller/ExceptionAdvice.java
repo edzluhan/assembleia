@@ -1,11 +1,11 @@
 package com.eduardozluhan.assembly.controller;
 
+import com.eduardozluhan.assembly.exceptions.InvalidVoteValueException;
 import com.eduardozluhan.assembly.exceptions.ResourceAlreadyExistsException;
 import com.eduardozluhan.assembly.exceptions.UserAlreadyVotedException;
 import com.eduardozluhan.assembly.exceptions.VotingSessionNotAvailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class ExceptionAdvice {
@@ -24,13 +26,25 @@ public class ExceptionAdvice {
     @ExceptionHandler(VotingSessionNotAvailableException.class)
     public ResponseEntity<String> notFound(VotingSessionNotAvailableException e) {
         LOGGER.error(e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e.getMessage(), NOT_FOUND);
     }
 
-    @ExceptionHandler({UserAlreadyVotedException.class, ResourceAlreadyExistsException.class})
+    @ExceptionHandler(UserAlreadyVotedException.class)
     public ResponseEntity<String> conflict(UserAlreadyVotedException e) {
         LOGGER.error(e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(e.getMessage(), CONFLICT);
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<String> conflict(ResourceAlreadyExistsException e) {
+        LOGGER.error(e.getMessage());
+        return new ResponseEntity<>(e.getMessage(), CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidVoteValueException.class)
+    public ResponseEntity<String> badRequest(InvalidVoteValueException e) {
+        LOGGER.error(e.getMessage());
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -46,7 +60,6 @@ public class ExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> badRequest(MethodArgumentNotValidException e) {
         LOGGER.error(e.getMessage());
-
         return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
 }

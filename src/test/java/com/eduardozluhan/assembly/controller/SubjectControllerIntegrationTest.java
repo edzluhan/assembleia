@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,19 +32,35 @@ class SubjectControllerIntegrationTest {
     private SubjectService service;
 
     @Test
-    void shouldReturn201WithSubjectId() throws Exception, ResourceAlreadyExistsException {
+    void shouldRespond201WithSubjectId() throws Exception, ResourceAlreadyExistsException {
         when(service.storeSubject(any()))
                 .thenReturn(new Subject(1L, "title for test subject", "some details"));
 
         mockMvc.perform(post("/subject")
-        .content("{\n" +
-                "    \"title\": \"title for test subject\",\n" +
-                "    \"details\": \"some details\"\n" +
-                "}")
+                .content("{\n" +
+                        "    \"title\": \"title for test subject\",\n" +
+                        "    \"details\": \"some details\"\n" +
+                        "}")
                 .contentType(MediaType.APPLICATION_JSON)
         )
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.title").value("title for test subject"))
-        .andExpect(jsonPath("$.details").value("some details"));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value("title for test subject"))
+                .andExpect(jsonPath("$.details").value("some details"));
+    }
+
+    @Test
+    void shouldRespond409WhenSubjectAlreadyExists() throws ResourceAlreadyExistsException, Exception {
+        when(service.storeSubject(any()))
+                .thenThrow(new ResourceAlreadyExistsException("Subject"));
+
+        mockMvc.perform(post("/subject")
+                .content("{\n" +
+                        "    \"title\": \"title for test subject\",\n" +
+                        "    \"details\": \"some details\"\n" +
+                        "}")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isConflict())
+        .andExpect(content().string("Subject already exists."));
     }
 }
