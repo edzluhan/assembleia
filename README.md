@@ -148,3 +148,34 @@ No caso do corpo da requisição não estar de acordo com o contrato, a resposta
 ```jsx
 400 - BAD REQUEST
 ```
+
+### Resultado da votação:
+
+GET `/voting-session/{votingSessionId}/report`
+
+A _path variable_ `votingSessionId` é de preenchimento obrigatório.
+
+**Respostas da requisição:**
+
+Quando for encontrada uma sessão de votação com o identificador informado na URL, **mesmo que a sessão ainda esteja aberta**, será retornada uma resposta como a seguinte:
+
+
+```jsx
+200 - OK
+{
+    "id": 1,
+    "votesInFavor": 500, 
+    "votesAgainst": 200,
+    "votesCount": 700,
+    "result": "Subject approved with 500 votes in favor and 200 votes against"
+}
+```
+
+
+No caso da sessão não existir, a resposta será semelhante à seguinte:
+
+```jsx
+404 - NOT FOUND
+
+"Voting session with id 1 is not available."
+```
