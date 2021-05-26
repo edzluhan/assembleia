@@ -179,3 +179,11 @@ No caso da sessão não existir, a resposta será semelhante à seguinte:
 
 "Voting session with id 1 is not available."
 ```
+
+## Pontos de melhorias:
+
+- Melhor tratamento de exceções do tipo ConstraintViolationException e das mensagens de erro retornadas
+- Query que busca os votos no banco poderia ser melhorada para buscar todos os dados em uma única consulta em vez de uma para cada tipo de voto
+- Usar um ENUM para mapear os valores dos votos
+- Melhorar a validação dos valores dos votos
+- Usar alguma ferramenta adequada para documentação da API, ex: Swagger
