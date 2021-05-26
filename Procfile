@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/classes:target/dependency/* com.eduardozluhan.assembly
+web: java -jar build/libs/assembly-0.0.1-SNAPSHOT.jar
