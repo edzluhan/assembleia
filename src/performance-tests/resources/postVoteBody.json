@@ -1,0 +1,5 @@
+{
+    "userId": "${user_id}",
+    "votingSessionId": 1,
+    "voteValue": "Sim"
+}

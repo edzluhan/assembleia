@@ -1,0 +1,15 @@
+dependencies {
+    gatling 'com.google.code.gson:gson:2.8.0'
+    gatling 'org.scalaj:scalaj-http_2.12:2.4.2'
+}
+
+sourceSets {
+    gatling {
+        scala.srcDir file('src/performance-tests/simulations')
+        resources.srcDir file('src/performance-tests/resources')
+    }
+}
+
+gatling {
+    simulations = { include "**/*Simulation.scala" }
+}
