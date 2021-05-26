@@ -187,3 +187,5 @@ No caso da sessão não existir, a resposta será semelhante à seguinte:
 - Usar um ENUM para mapear os valores dos votos
 - Melhorar a validação dos valores dos votos
 - Usar alguma ferramenta adequada para documentação da API, ex: Swagger
+- Dividir os tipos diferentes de teste em arquivos separados do gradle e tasks diferentes, ex: make integration para rodar apenas testes de integração
+- Adicionar testes de componente apontando para uma implementação de banco de dados em memória
